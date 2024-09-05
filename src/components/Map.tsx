@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   MapContainer,
   TileLayer,
@@ -7,17 +7,17 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
-
 import styles from "./Map.module.css";
 import { useEffect, useState } from "react";
 import { useCities } from "../contexts/CitiesContext";
 import { useGeolocation } from "../hooks/useGeolocation";
 import { useUrlPosition } from "../hooks/useUrlPosition";
 import Button from "./Button";
+import { LatLngExpression } from "leaflet";
 
 function Map() {
   const { cities } = useCities();
-  const [mapPosition, setMapPosition] = useState([40, 0]);
+  const [mapPosition, setMapPosition] = useState<[number, number]>([40, 0]);
   const {
     isLoading: isLoadingPosition,
     position: geolocationPosition,
@@ -25,12 +25,14 @@ function Map() {
   } = useGeolocation();
   const [mapLat, mapLng] = useUrlPosition();
 
-  useEffect(
-    function () {
-      if (mapLat && mapLng) setMapPosition([mapLat, mapLng]);
-    },
-    [mapLat, mapLng]
-  );
+  useEffect(() => {
+    if (mapLat && mapLng) {
+      setMapPosition([parseFloat(mapLat), parseFloat(mapLng)] as [
+        number,
+        number
+      ]);
+    }
+  }, [mapLat, mapLng]);
 
   useEffect(
     function () {
@@ -49,15 +51,12 @@ function Map() {
       )}
 
       <MapContainer
-        center={mapPosition}
+        center={mapPosition as LatLngExpression}
         zoom={6}
         scrollWheelZoom={true}
         className={styles.map}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
-        />
+        <TileLayer url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" />
         {cities.map((city) => (
           <Marker
             position={[city.position.lat, city.position.lng]}
@@ -76,9 +75,11 @@ function Map() {
   );
 }
 
-function ChangeCenter({ position }) {
+function ChangeCenter({ position }: { position: [number, number] }) {
   const map = useMap();
-  map.setView(position);
+  useEffect(() => {
+    map.setView(position as LatLngExpression);
+  }, [position, map]);
   return null;
 }
 
@@ -86,8 +87,11 @@ function DetectClick() {
   const navigate = useNavigate();
 
   useMapEvents({
-    click: (e) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    click: (e: any) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
   });
+
+  return null;
 }
 
 export default Map;

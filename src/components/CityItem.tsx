@@ -1,28 +1,39 @@
 import { Link } from "react-router-dom";
+import { MouseEvent } from "react";
 import { useCities } from "../contexts/CitiesContext";
 import styles from "./CityItem.module.css";
+import { City } from "../models/City";
 
-const formatDate = (date) =>
+interface Props {
+  city: City;
+}
+
+const formatDate = (date: string | Date) =>
   new Intl.DateTimeFormat("en", {
     day: "numeric",
     month: "long",
     year: "numeric",
   }).format(new Date(date));
 
-function CityItem({ city }) {
+function CityItem({ city }: Props) {
   const { currentCity, deleteCity } = useCities();
   const { cityName, emoji, date, id, position } = city;
 
-  function handleClick(e) {
+  function handleClick(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    deleteCity(id);
+
+    if (id !== undefined) {
+      deleteCity(id);
+    } else {
+      console.error("City ID is undefined");
+    }
   }
 
   return (
     <li>
       <Link
         className={`${styles.cityItem} ${
-          id === currentCity.id ? styles["cityItem--active"] : ""
+          currentCity && id === currentCity.id ? styles["cityItem--active"] : ""
         }`}
         to={`${id}?lat=${position.lat}&lng=${position.lng}`}
       >

@@ -1,24 +1,24 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
 import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import Button from "./Button";
 import BackButton from "./BackButton";
-
 import styles from "./Form.module.css";
 import { useUrlPosition } from "../hooks/useUrlPosition";
 import Message from "./Message";
 import Spinner from "./Spinner";
 import { useCities } from "../contexts/CitiesContext";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import { City } from "../models/City";
 
-export function convertToEmoji(countryCode) {
+// eslint-disable-next-line react-refresh/only-export-components
+export function convertToEmoji(countryCode: string): string {
   const codePoints = countryCode
     .toUpperCase()
     .split("")
-    .map((char) => 127397 + char.charCodeAt());
+    .map((char) => 127397 + char.charCodeAt(0));
   return String.fromCodePoint(...codePoints);
 }
 
@@ -50,7 +50,6 @@ function Form() {
             `${BASE_URL}?latitude=${lat}&longitude=${lng}`
           );
           const data = await res.json();
-          console.log(data);
 
           if (!data.countryCode)
             throw new Error(
@@ -60,7 +59,8 @@ function Form() {
           setCityName(data.city || data.locality || "");
           setCountry(data.countryName);
           setEmoji(convertToEmoji(data.countryCode));
-        } catch (err) {
+        } catch (err: unknown) {
+          if (err instanceof Error) 
           setGeocodingError(err.message);
         } finally {
           setIsLoadingGeocoding(false);
@@ -71,20 +71,23 @@ function Form() {
     [lat, lng]
   );
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+  
     if (!cityName || !date) return;
-
-    const newCity = {
+  
+    const newCity: City = {
       cityName,
       country,
       emoji,
       date,
       notes,
-      position: { lat, lng },
+      position: {
+        lat: lat ? parseFloat(lat) : 0,
+        lng: lng ? parseFloat(lng) : 0,
+      },
     };
-
+  
     await createCity(newCity);
     navigate("/app/cities");
   }
@@ -116,7 +119,7 @@ function Form() {
 
         <DatePicker
           id="date"
-          onChange={(date) => setDate(date)}
+          onChange={(date: Date | null) => setDate(date || new Date())}
           selected={date}
           dateFormat="dd/MM/yyyy"
         />

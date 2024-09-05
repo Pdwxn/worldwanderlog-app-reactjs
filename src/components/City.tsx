@@ -5,28 +5,33 @@ import BackButton from "./BackButton";
 import styles from "./City.module.css";
 import Spinner from "./Spinner";
 
-const formatDate = (date) =>
-  new Intl.DateTimeFormat("en", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    weekday: "long",
-  }).format(new Date(date));
+const formatDate = (date?: string | Date) =>
+  date
+    ? new Intl.DateTimeFormat("en", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        weekday: "long",
+      }).format(new Date(date))
+    : "Date not available";
 
 function City() {
   const { id } = useParams();
   const { getCity, currentCity, isLoading } = useCities();
 
-  useEffect(
-    function () {
+  useEffect(() => {
+    if (id && (!currentCity || currentCity.id !== id)) {
       getCity(id);
-    },
-    [id, getCity]
-  );
-
-  const { cityName, emoji, date, notes } = currentCity;
+    }
+  }, [id, getCity, currentCity]);
 
   if (isLoading) return <Spinner />;
+
+  if (!currentCity) {
+    return <div>No city data available</div>;
+  }
+
+  const { cityName, emoji, date, notes } = currentCity;
 
   return (
     <div className={styles.city}>
@@ -39,7 +44,7 @@ function City() {
 
       <div className={styles.row}>
         <h6>You went to {cityName} on</h6>
-        <p>{formatDate(date || null)}</p>
+        <p>{formatDate(date)}</p>
       </div>
 
       {notes && (
