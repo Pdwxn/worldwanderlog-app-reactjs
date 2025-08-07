@@ -1,28 +1,29 @@
-# React + TypeScript + Vite
+# WorldWanderLog 🌍✈️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern travel logging application built with React and Vite that allows users to document, organize, and share their travel experiences from around the world.
+🚀 Features
 
-Currently, two official plugins are available:
+Travel Log Management: Create, edit, and delete travel entries
+Interactive Maps: Visualize your travel destinations on an interactive map
+Photo Gallery: Upload and organize photos from your trips
+Trip Planning: Plan future destinations and itineraries
+Search & Filter: Easily find specific trips or destinations
+Responsive Design: Optimized for desktop, tablet, and mobile devices
+User Authentication: Secure login and personal travel logs
+Social Sharing: Share your travel experiences with friends
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🎯 Usage
+Adding a New Travel Entry
 
-## Expanding the ESLint configuration
+1. Navigate to the Dashboard
+2. Click on "Add New Trip"
+3. Fill in the destination, dates, and description
+4. Upload photos and mark locations on the map
+5. Save your travel log entry
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Viewing Travel History
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-# worldwanderlog-app-reactjs
+- Use the map view to see all your visited locations
+- Browse through your travel timeline
+- Filter trips by date, location, or tags
+- Search for specific destinations or experiences
