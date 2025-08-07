@@ -1,7 +1,8 @@
 # WorldWanderLog 🌍✈️
 
 A modern travel logging application built with React and Vite that allows users to document, organize, and share their travel experiences from around the world.
-🚀 Features
+
+## 🚀 Features
 
 Travel Log Management: Create, edit, and delete travel entries
 Interactive Maps: Visualize your travel destinations on an interactive map
@@ -12,7 +13,8 @@ Responsive Design: Optimized for desktop, tablet, and mobile devices
 User Authentication: Secure login and personal travel logs
 Social Sharing: Share your travel experiences with friends
 
-🎯 Usage
+## 🎯 Usage
+
 Adding a New Travel Entry
 
 1. Navigate to the Dashboard
